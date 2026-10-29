@@ -31,7 +31,7 @@ resource "aws_lambda_function" "registrar_chamado" {
 
   depends_on = [
     aws_iam_role_policy.registrar_logs,
-    aws_iam_role_policy.publicar_manutencao, 
+    aws_iam_role_policy.publicar_manutencao,
     aws_cloudwatch_log_group.registrar_chamado,
   ]
 }
