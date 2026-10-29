@@ -49,3 +49,22 @@ resource "aws_iam_role_policy" "publicar_manutencao" {
   role   = aws_iam_role.registrar_chamado.id
   policy = data.aws_iam_policy_document.publicar_manutencao.json
 }
+
+resource "aws_iam_role" "auditar_chamado" {
+  name               = "auditar-chamado-role"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+}
+
+data "aws_iam_policy_document" "auditar_logs" {
+  statement {
+    effect    = "Allow"
+    actions   = ["logs:CreateLogStream", "logs:PutLogEvents"]
+    resources = ["${aws_cloudwatch_log_group.auditar_chamado.arn}:*"]
+  }
+}
+
+resource "aws_iam_role_policy" "auditar_logs" {
+  name   = "escrever-logs"
+  role   = aws_iam_role.auditar_chamado.id
+  policy = data.aws_iam_policy_document.auditar_logs.json
+}
